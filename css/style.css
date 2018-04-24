@@ -1,0 +1,76 @@
+body{
+  font: 15px helvetica,arial,freesans,clean,sans-serif;
+  margin: 20px auto;    
+  text-align: center;
+}
+#waveform{
+  background: rgba(0,0,0,0.8);
+}
+
+h1{
+  margin: 5px;
+}
+h2{
+  font-size: 14px;
+  margin: 0px;
+}
+h3{
+    font-size: 14px;
+    margin: 10px;
+}
+
+
+button{
+  background: #eee;
+  border: 1px solid #ddd;
+  border-bottom: 4px solid #ccc;
+  cursor: pointer;
+  font-size: 20px;
+  margin-top: 10px;
+  padding: 10px;
+}
+button:active{
+  outline: none;
+  border-top: 4px solid #eee;
+  border-bottom: 2px solid #777;
+}
+button:focus{
+  outline: none;
+}
+
+
+
+#DContainer {
+    width:100%;
+    margin:0 auto;
+}
+
+#waveform {
+    width:70%;
+    margin:0 auto;
+}
+
+#DContainerSong {
+     width:70%;
+    margin:0 auto;
+}
+
+ul{
+    width:100%;
+  display: block;
+  margin-top: 20px;
+}
+
+li{
+  cursor: pointer;
+  list-style: none;
+  width:20%;
+  float:left;
+  height:100px;
+  margin: 5px 0.5%;
+  border: 1px solid black;
+  padding:2%;
+}
+li:hover, li.active{
+  font-weight: bold;
+}

@@ -76,13 +76,13 @@ var slider = 0;
 $('#waveform').on('mousewheel', function (e) {
     if (e.originalEvent.wheelDelta > 0) {
         slider = slider + 10;
-        if (slider > 100) {
-            slider = 100;
+        if (slider > 200) {
+            slider = 200;
         }
         var zoomLevel = Number(slider);
         wavesurfer.zoom(zoomLevel);
 
-        ResizedecreaseNewResion(slider);
+        resizeresign(slider);
     }
     else {
         slider = slider - 10;
@@ -91,44 +91,9 @@ $('#waveform').on('mousewheel', function (e) {
         }
         var zoomLevel = Number(slider);
         wavesurfer.zoom(zoomLevel);
-        ResizedecreaseNewResion(slider);
+        resizeresign(slider);
     }
 });
-
-
-function ResizedecreaseNewResion(Slidervalue) {
-    var newadd = 0;
-    wavesurfer.clearRegions();
-    wavesurfer.enableDragSelection({});
-
-    if (Slidervalue != 0)
-        newadd = 0.05 - (0.05 * Slidervalue / 200)
-    else
-        newadd = 0.08;
-
-    if (Slidervalue == 10) {
-        newadd = 0.08;
-    }
-
-
-    wavesurfer.addRegion({
-        start: 2, // time in seconds
-        end: 2 + newadd, // time in seconds
-        color: 'Yellow'
-    });
-
-    wavesurfer.addRegion({
-        start: 8,
-        end: 8 + newadd,
-        color: 'Red'
-    });
-
-    wavesurfer.addRegion({
-        start: 15,
-        end: 15 + newadd,
-        color: 'Green'
-    });
-}
 
 
 function resizeresign(Slider)
@@ -258,13 +223,6 @@ wavesurfer.on('ready', function (e) {
         });
 
     }
-
-  
-
-   
-
-
-
 });
 
 

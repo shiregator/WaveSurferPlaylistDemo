@@ -81,6 +81,8 @@ $('#waveform').on('mousewheel', function (e) {
         }
         var zoomLevel = Number(slider);
         wavesurfer.zoom(zoomLevel);
+
+        resizeresign(slider);
     }
     else {
         slider = slider - 10;
@@ -89,9 +91,102 @@ $('#waveform').on('mousewheel', function (e) {
         }
         var zoomLevel = Number(slider);
         wavesurfer.zoom(zoomLevel);
+        resizeresign(slider);
     }
 });
 
+
+function resizeresign(Slider)
+{
+    if (Slider > 0 && Slider < 50)
+    {
+        wavesurfer.clearRegions();
+        wavesurfer.enableDragSelection({});
+        wavesurfer.addRegion({
+            start: 2, // time in seconds
+            end: 2.07, // time in seconds
+            color: 'Yellow'
+        });
+
+        wavesurfer.addRegion({
+            start: 8,
+            end: 8.07,
+            color: 'Red'
+        });
+
+        wavesurfer.addRegion({
+            start: 15,
+            end: 15.07,
+            color: 'Green'
+        });
+    }
+
+    else if ( Slider >= 50 && Slider <= 100) {
+        wavesurfer.clearRegions();
+        wavesurfer.enableDragSelection({});
+        wavesurfer.addRegion({
+            start: 2, // time in seconds
+            end: 2.03, // time in seconds
+            color: 'Yellow'
+        });
+
+        wavesurfer.addRegion({
+            start: 8,
+            end: 8.03,
+            color: 'Red'
+        });
+
+        wavesurfer.addRegion({
+            start: 15,
+            end: 15.03,
+            color: 'Green'
+        });
+    }
+    else if (Slider > 100 && Slider < 150) {
+
+        wavesurfer.clearRegions();
+        wavesurfer.enableDragSelection({});
+        wavesurfer.addRegion({
+            start: 2, // time in seconds
+            end: 2.02, // time in seconds
+            color: 'Yellow'
+        });
+
+        wavesurfer.addRegion({
+            start: 8,
+            end: 8.02,
+            color: 'Red'
+        });
+
+        wavesurfer.addRegion({
+            start: 15,
+            end: 15.02,
+            color: 'Green'
+        });
+
+    }
+    else if (Slider >= 150 && Slider <= 200) {
+        wavesurfer.clearRegions();
+        wavesurfer.enableDragSelection({});
+        wavesurfer.addRegion({
+            start: 2, // time in seconds
+            end: 2.01, // time in seconds
+            color: 'Yellow'
+        });
+
+        wavesurfer.addRegion({
+            start: 8,
+            end: 8.01,
+            color: 'Red'
+        });
+
+        wavesurfer.addRegion({
+            start: 15,
+            end: 15.01,
+            color: 'Green'
+        });
+    }
+}
 
 //wavesurfer.on('ready', function () {
 //    var timeline = Object.create(WaveSurfer.Timeline);

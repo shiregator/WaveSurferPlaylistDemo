@@ -44,25 +44,46 @@ $('body').on('click', '#playTrack', function () {
     wavesurfer.load(myList[$(this).data('id')]);
 
     setTimeout(function () { 
-    // Add a couple of pre-defined regions
-    wavesurfer.enableDragSelection({});
-    wavesurfer.addRegion({
-        start: 2, // time in seconds
-        end: 2.10, // time in seconds
-        color: 'Yellow'
-    });
+        // Add a couple of pre-defined regions
+        wavesurfer.enableDragSelection({});
+        var duration = wavesurfer.getDuration();
+        var timeframe = duration / 200;
+        var clipStarttime = timeframe;
+        var clipEndtime = 0;
+        var demotext = "";
+        for (var i = 1; i <=200; i++)
+        {
+            clipEndtime = clipStarttime + timeframe;
+            wavesurfer.addRegion({
+                start: clipStarttime, // time in seconds
+                end: clipStarttime+0.0925, // time in seconds
+                color: 'Yellow'
+            });
+            clipStarttime = clipEndtime;
 
-    wavesurfer.addRegion({
-        start: 8,
-        end: 8.10,
-        color: 'Red'
-    });
+            demotext = demotext + "</br>" + "StartTime = " + clipStarttime + "  Endtime = " + clipStarttime + 0.08;
+        }
 
-    wavesurfer.addRegion({
-        start: 15,
-        end: 15.10,
-        color: 'Green'
-    });
+        document.getElementById('Demotext').innerHTML = demotext.toString();
+
+    
+    //wavesurfer.addRegion({
+    //    start: 2, // time in seconds
+    //    end: 2.10, // time in seconds
+    //    color: 'Yellow'
+    //});
+
+    //wavesurfer.addRegion({
+    //    start: 8,
+    //    end: 8.10,
+    //    color: 'Red'
+    //});
+
+    //wavesurfer.addRegion({
+    //    start: 15,
+    //    end: 15.10,
+    //    color: 'Green'
+    //});
     }, 3000);
 
 });
@@ -97,6 +118,7 @@ $('#waveform').on('mousewheel', function (e) {
 
 
 function ResizedecreaseNewResion(Slidervalue) {
+
     var newadd = 0;
     wavesurfer.clearRegions();
     wavesurfer.enableDragSelection({});
@@ -104,30 +126,48 @@ function ResizedecreaseNewResion(Slidervalue) {
     if (Slidervalue != 0)
         newadd = 0.05 - (0.05 * Slidervalue / 200)
     else
-        newadd = 0.08;
+        newadd = 0.0925;
 
     if (Slidervalue == 10) {
-        newadd = 0.08;
+        newadd = 0.0925;
+    }
+
+    
+    var duration = wavesurfer.getDuration();
+    var timeframe = duration / 200;
+    var clipStarttime = timeframe;
+    var clipEndtime = 0;
+    for (var i = 1; i <= 200; i++) {
+        clipEndtime = clipStarttime + timeframe;
+        wavesurfer.addRegion({
+            start: clipStarttime, // time in seconds
+            end: clipStarttime + newadd, // time in seconds
+            color: 'Yellow'
+        });
+        clipStarttime = clipEndtime;
+
     }
 
 
-    wavesurfer.addRegion({
-        start: 2, // time in seconds
-        end: 2 + newadd, // time in seconds
-        color: 'Yellow'
-    });
+   
 
-    wavesurfer.addRegion({
-        start: 8,
-        end: 8 + newadd,
-        color: 'Red'
-    });
+    //wavesurfer.addRegion({
+    //    start: 2, // time in seconds
+    //    end: 2 + newadd, // time in seconds
+    //    color: 'Yellow'
+    //});
 
-    wavesurfer.addRegion({
-        start: 15,
-        end: 15 + newadd,
-        color: 'Green'
-    });
+    //wavesurfer.addRegion({
+    //    start: 8,
+    //    end: 8 + newadd,
+    //    color: 'Red'
+    //});
+
+    //wavesurfer.addRegion({
+    //    start: 15,
+    //    end: 15 + newadd,
+    //    color: 'Green'
+    //});
 }
 
 
@@ -223,14 +263,14 @@ function resizeresign(Slider)
     }
 }
 
-//wavesurfer.on('ready', function () {
-//    var timeline = Object.create(WaveSurfer.Timeline);
+wavesurfer.on('ready', function () {
+    var timeline = Object.create(WaveSurfer.Timeline);
 
-//    timeline.init({
-//        wavesurfer: wavesurfer,
-//        container: '#waveform-timeline'
-//    });
-//});
+    timeline.init({
+        wavesurfer: wavesurfer,
+        container: '#waveform-timeline'
+    });
+});
 
 
 wavesurfer.on('ready', function (e) {

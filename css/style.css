@@ -50,6 +50,12 @@ button:focus{
     margin:0 auto;
 }
 
+#waveform-timeline {
+    width:70%;
+    margin:0 auto;
+    padding-top:10px;
+}
+
 #DContainerSong {
      width:70%;
     margin:0 auto;

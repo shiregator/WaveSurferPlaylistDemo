@@ -1,4 +1,4 @@
-
+var regionArr = new Array();
 
 var wavesurfer = WaveSurfer.create({
     container: '#waveform',
@@ -19,6 +19,8 @@ $('body').on('click', '.loadM3U', function () {
         playlistFile: 'abc.mp3',
         playlistType: 'm3u'
     });
+
+    wavesurfer.enableDragSelection({});
 });
 
 // on playlist parsed with event playlist-ready
@@ -41,50 +43,53 @@ wavesurfer.on('waveform-ready', function () {
 // on playlist track click
 $('body').on('click', '#playTrack', function () {
     wavesurfer.clearRegions();
+    regionArr.length = 0;
+    wavesurfer.clearRegions();   
+    $("#SelectionTime").text(" ");
     wavesurfer.load(myList[$(this).data('id')]);
+    wavesurfer.enableDragSelection({});
+    //setTimeout(function () { 
+    //    // Add a couple of pre-defined regions
+    //    wavesurfer.enableDragSelection({});
+    //    var duration = wavesurfer.getDuration();
+    //    var timeframe = duration / 200;
+    //    var clipStarttime = timeframe;
+    //    var clipEndtime = 0;
+    //    var demotext = "";
+    //    for (var i = 1; i <=200; i++)
+    //    {
+    //        clipEndtime = clipStarttime + timeframe;
+    //        wavesurfer.addRegion({
+    //            start: clipStarttime, // time in seconds
+    //            end: clipStarttime+0.0925, // time in seconds
+    //            color: 'Yellow'
+    //        });
+    //        clipStarttime = clipEndtime;
 
-    setTimeout(function () { 
-        // Add a couple of pre-defined regions
-        wavesurfer.enableDragSelection({});
-        var duration = wavesurfer.getDuration();
-        var timeframe = duration / 200;
-        var clipStarttime = timeframe;
-        var clipEndtime = 0;
-        var demotext = "";
-        for (var i = 1; i <=200; i++)
-        {
-            clipEndtime = clipStarttime + timeframe;
-            wavesurfer.addRegion({
-                start: clipStarttime, // time in seconds
-                end: clipStarttime+0.0925, // time in seconds
-                color: 'Yellow'
-            });
-            clipStarttime = clipEndtime;
+    //       // demotext = demotext + "</br>" + "StartTime = " + clipStarttime + "  Endtime = " + clipStarttime + 0.08;
+    //    }
 
-            demotext = demotext + "</br>" + "StartTime = " + clipStarttime + "  Endtime = " + clipStarttime + 0.08;
-        }
+    //    //document.getElementById('Demotext').innerHTML = demotext.toString();
 
-        document.getElementById('Demotext').innerHTML = demotext.toString();
 
-    
-    //wavesurfer.addRegion({
-    //    start: 2, // time in seconds
-    //    end: 2.10, // time in seconds
-    //    color: 'Yellow'
-    //});
+    ////wavesurfer.addRegion({
+    ////    start: 2, // time in seconds
+    ////    end: 2.10, // time in seconds
+    ////    color: 'Yellow'
+    ////});
 
-    //wavesurfer.addRegion({
-    //    start: 8,
-    //    end: 8.10,
-    //    color: 'Red'
-    //});
+    ////wavesurfer.addRegion({
+    ////    start: 8,
+    ////    end: 8.10,
+    ////    color: 'Red'
+    ////});
 
-    //wavesurfer.addRegion({
-    //    start: 15,
-    //    end: 15.10,
-    //    color: 'Green'
-    //});
-    }, 3000);
+    ////wavesurfer.addRegion({
+    ////    start: 15,
+    ////    end: 15.10,
+    ////    color: 'Green'
+    ////});
+    //}, 3000);
 
 });
 
@@ -92,18 +97,18 @@ $('body').on('click', '#playTrack', function () {
 
 
 var slider = 0;
-
+var sliderMax = 300;
 
 $('#waveform').on('mousewheel', function (e) {
     if (e.originalEvent.wheelDelta > 0) {
         slider = slider + 10;
-        if (slider > 100) {
-            slider = 100;
+        if (slider > sliderMax) {
+            slider = sliderMax;
         }
         var zoomLevel = Number(slider);
         wavesurfer.zoom(zoomLevel);
 
-        ResizedecreaseNewResion(slider);
+        ResizeRegionOnZooming(slider);
     }
     else {
         slider = slider - 10;
@@ -112,19 +117,19 @@ $('#waveform').on('mousewheel', function (e) {
         }
         var zoomLevel = Number(slider);
         wavesurfer.zoom(zoomLevel);
-        ResizedecreaseNewResion(slider);
+        // ResizedecreaseNewResion(slider);
+        ResizeRegionOnZooming(slider);
     }
 });
 
-
-function ResizedecreaseNewResion(Slidervalue) {
+function ResizeRegionOnZooming(Slidervalue) {
 
     var newadd = 0;
     wavesurfer.clearRegions();
     wavesurfer.enableDragSelection({});
 
     if (Slidervalue != 0)
-        newadd = 0.05 - (0.05 * Slidervalue / 200)
+        newadd = 0.05 - (0.05 * Slidervalue / 200)    //200 is the Double percentage value
     else
         newadd = 0.0925;
 
@@ -132,49 +137,60 @@ function ResizedecreaseNewResion(Slidervalue) {
         newadd = 0.0925;
     }
 
-    
-    var duration = wavesurfer.getDuration();
-    var timeframe = duration / 200;
-    var clipStarttime = timeframe;
-    var clipEndtime = 0;
-    for (var i = 1; i <= 200; i++) {
-        clipEndtime = clipStarttime + timeframe;
+
+
+    for (var i = 0; i < regionArr.length; i++) {
+        //clipEndtime = regionArr[i];
         wavesurfer.addRegion({
-            start: clipStarttime, // time in seconds
-            end: clipStarttime + newadd, // time in seconds
-            color: 'Yellow'
+            start: regionArr[i], // time in seconds
+            end: regionArr[i] + newadd, // time in seconds
+            color: 'red'
         });
-        clipStarttime = clipEndtime;
+        this.wavesurfer.fireEvent('region-update-end', this);
 
     }
 
 
-   
-
-    //wavesurfer.addRegion({
-    //    start: 2, // time in seconds
-    //    end: 2 + newadd, // time in seconds
-    //    color: 'Yellow'
-    //});
-
-    //wavesurfer.addRegion({
-    //    start: 8,
-    //    end: 8 + newadd,
-    //    color: 'Red'
-    //});
-
-    //wavesurfer.addRegion({
-    //    start: 15,
-    //    end: 15 + newadd,
-    //    color: 'Green'
-    //});
 }
 
 
-function resizeresign(Slider)
-{
-    if (Slider > 0 && Slider < 50)
-    {
+//function ResizedecreaseNewResion(Slidervalue) {
+
+//    var newadd = 0;
+//    wavesurfer.clearRegions();
+//    wavesurfer.enableDragSelection({});
+
+//    if (Slidervalue != 0)
+//        newadd = 0.05 - (0.05 * Slidervalue / 200)
+//    else
+//        newadd = 0.0925;
+
+//    if (Slidervalue == 10) {
+//        newadd = 0.0925;
+//    }
+
+
+//    var duration = wavesurfer.getDuration();
+//    var timeframe = duration / 200;
+//    var clipStarttime = timeframe;
+//    var clipEndtime = 0;
+//    for (var i = 1; i <= 200; i++) {
+//        clipEndtime = clipStarttime + timeframe;
+//        wavesurfer.addRegion({
+//            start: clipStarttime, // time in seconds
+//            end: clipStarttime + newadd, // time in seconds
+//            color: 'Yellow'
+//        });
+//        clipStarttime = clipEndtime;
+
+//    }
+
+
+//}
+
+
+function resizeresign(Slider) {
+    if (Slider > 0 && Slider < 50) {
         wavesurfer.clearRegions();
         wavesurfer.enableDragSelection({});
         wavesurfer.addRegion({
@@ -196,7 +212,7 @@ function resizeresign(Slider)
         });
     }
 
-    else if ( Slider >= 50 && Slider <= 100) {
+    else if (Slider >= 50 && Slider <= 100) {
         wavesurfer.clearRegions();
         wavesurfer.enableDragSelection({});
         wavesurfer.addRegion({
@@ -269,8 +285,11 @@ wavesurfer.on('ready', function () {
     timeline.init({
         wavesurfer: wavesurfer,
         container: '#waveform-timeline'
+
     });
 });
+
+
 
 
 wavesurfer.on('ready', function (e) {
@@ -298,14 +317,42 @@ wavesurfer.on('ready', function (e) {
         });
 
     }
-
-  
-
-   
+});
 
 
+var now = 0.00;
+
+$('body').on('click', '.MarkMP', function () {
+
+    now = wavesurfer.getCurrentTime();
+
+    wavesurfer.addRegion({
+        start: now, // time in seconds
+        end: now + 0.0925, // time in seconds
+        color: 'Red'
+    });
+    //document.getElementById('SelectionTime').text = now;
+    regionArr.push(now);
+    var regiontext = "";
+    for (var i = 0; i < regionArr.length; i++) {
+        regiontext = regiontext + regionArr[i] + " ";
+    }
+
+    $("#SelectionTime").text(regiontext);
+    console.log(now);
+});
+
+
+$('body').on('click', '.DeleteMarkMP', function () {
+    now = "";
+    regionArr.length = 0;
+    wavesurfer.clearRegions();
+    //document.getElementById('SelectionTime').text = now;
+    $("#SelectionTime").text(" ");
 
 });
+
+
 
 
 

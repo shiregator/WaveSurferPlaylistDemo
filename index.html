@@ -5,7 +5,7 @@
     <title>WaveSurfer.js - playlist plugin</title>
 
 
-
+    <link href="css/FontCSS.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/style.css">
 
 </head>
@@ -23,7 +23,22 @@
             <i class="glyphicon glyphicon-play"></i>
             Load Song
         </button>
+        <div class="mark-controls">
+            <button class="btn btn-success MarkMP" data-action="green-mark">
+                <i class="glyphicon glyphicon-flag"></i>
+                Set mark
+            </button>   
+            
+            <button class="btn btn-success DeleteMarkMP" data-action="Delete-mark">
+                <i class="glyphicon glyphicon-flag"></i>
+                Delete mark
+            </button>          
+        </div>
 
+        <div>
+            <label id="SelectionTime"></label>
+
+        </div>
 
         <div id="DContainerSong">
             <ul id="playlistbox" class="col-md-12"></ul>
@@ -36,8 +51,8 @@
 
     </div>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
+    <!--<script src="wavesurfer.min.js"></script>-->
     <script src="js/wavesurfer.min.js"></script>
-
     <!--<script src="js/wavesurfer.playlist.min.js"></script>-->
 
     <script src="js/Playlist.js"></script>

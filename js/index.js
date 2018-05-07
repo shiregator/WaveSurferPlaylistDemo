@@ -1,4 +1,7 @@
+
 var regionArr = new Array();
+var regionIDArr = new Array();
+var countreg = 1;
 
 var wavesurfer = WaveSurfer.create({
     container: '#waveform',
@@ -44,10 +47,12 @@ wavesurfer.on('waveform-ready', function () {
 $('body').on('click', '#playTrack', function () {
     wavesurfer.clearRegions();
     regionArr.length = 0;
-    wavesurfer.clearRegions();   
+     
     $("#SelectionTime").text(" ");
     wavesurfer.load(myList[$(this).data('id')]);
     wavesurfer.enableDragSelection({});
+
+
     //setTimeout(function () { 
     //    // Add a couple of pre-defined regions
     //    wavesurfer.enableDragSelection({});
@@ -122,8 +127,14 @@ $('#waveform').on('mousewheel', function (e) {
     }
 });
 
+
+
+
 function ResizeRegionOnZooming(Slidervalue) {
 
+   // regionArr.length = 0;
+    regionIDArr.length = 0;
+    countreg = 1;
     var newadd = 0;
     wavesurfer.clearRegions();
     wavesurfer.enableDragSelection({});
@@ -137,21 +148,31 @@ function ResizeRegionOnZooming(Slidervalue) {
         newadd = 0.0925;
     }
 
+    //var i = wavesurfer.region.length;
+
+
 
 
     for (var i = 0; i < regionArr.length; i++) {
         //clipEndtime = regionArr[i];
         wavesurfer.addRegion({
+            id: 'Sample' + countreg,
             start: regionArr[i], // time in seconds
             end: regionArr[i] + newadd, // time in seconds
             color: 'red'
         });
-        this.wavesurfer.fireEvent('region-update-end', this);
-
+       // this.wavesurfer.fireEvent('region-update-end', this);
+        regionIDArr.push('Sample' + countreg);
+        countreg = countreg + 1;
     }
 
 
 }
+
+
+wavesurfer.on('onmousedown', function () {
+    wavesurfer.play();
+});
 
 
 //function ResizedecreaseNewResion(Slidervalue) {
@@ -189,95 +210,7 @@ function ResizeRegionOnZooming(Slidervalue) {
 //}
 
 
-function resizeresign(Slider) {
-    if (Slider > 0 && Slider < 50) {
-        wavesurfer.clearRegions();
-        wavesurfer.enableDragSelection({});
-        wavesurfer.addRegion({
-            start: 2, // time in seconds
-            end: 2.07, // time in seconds
-            color: 'Yellow'
-        });
 
-        wavesurfer.addRegion({
-            start: 8,
-            end: 8.07,
-            color: 'Red'
-        });
-
-        wavesurfer.addRegion({
-            start: 15,
-            end: 15.07,
-            color: 'Green'
-        });
-    }
-
-    else if (Slider >= 50 && Slider <= 100) {
-        wavesurfer.clearRegions();
-        wavesurfer.enableDragSelection({});
-        wavesurfer.addRegion({
-            start: 2, // time in seconds
-            end: 2.03, // time in seconds
-            color: 'Yellow'
-        });
-
-        wavesurfer.addRegion({
-            start: 8,
-            end: 8.03,
-            color: 'Red'
-        });
-
-        wavesurfer.addRegion({
-            start: 15,
-            end: 15.03,
-            color: 'Green'
-        });
-    }
-    else if (Slider > 100 && Slider < 150) {
-
-        wavesurfer.clearRegions();
-        wavesurfer.enableDragSelection({});
-        wavesurfer.addRegion({
-            start: 2, // time in seconds
-            end: 2.02, // time in seconds
-            color: 'Yellow'
-        });
-
-        wavesurfer.addRegion({
-            start: 8,
-            end: 8.02,
-            color: 'Red'
-        });
-
-        wavesurfer.addRegion({
-            start: 15,
-            end: 15.02,
-            color: 'Green'
-        });
-
-    }
-    else if (Slider >= 150 && Slider <= 200) {
-        wavesurfer.clearRegions();
-        wavesurfer.enableDragSelection({});
-        wavesurfer.addRegion({
-            start: 2, // time in seconds
-            end: 2.01, // time in seconds
-            color: 'Yellow'
-        });
-
-        wavesurfer.addRegion({
-            start: 8,
-            end: 8.01,
-            color: 'Red'
-        });
-
-        wavesurfer.addRegion({
-            start: 15,
-            end: 15.01,
-            color: 'Green'
-        });
-    }
-}
 
 wavesurfer.on('ready', function () {
     var timeline = Object.create(WaveSurfer.Timeline);
@@ -321,25 +254,45 @@ wavesurfer.on('ready', function (e) {
 
 
 var now = 0.00;
+var countreg = 1;
+
 
 $('body').on('click', '.MarkMP', function () {
 
     now = wavesurfer.getCurrentTime();
 
+    if (slider != 0)
+        newadd = 0.05 - (0.05 * slider / 200)    //200 is the Double percentage value
+    else
+        newadd = 0.0925;
+
+    if (slider == 10) {
+        newadd = 0.0925;
+    }
+
     wavesurfer.addRegion({
+        id: 'Sample' + countreg,
         start: now, // time in seconds
-        end: now + 0.0925, // time in seconds
-        color: 'Red'
+        end: now + newadd, // time in seconds
+        color: 'Red',
+        resize: true
     });
+
+    regionIDArr.push('Sample' + countreg);
+    countreg = countreg + 1;
+
+
+    //this.wavesurfer.fireEvent('region-update-end', this);
     //document.getElementById('SelectionTime').text = now;
     regionArr.push(now);
+   
     var regiontext = "";
     for (var i = 0; i < regionArr.length; i++) {
         regiontext = regiontext + regionArr[i] + " ";
     }
 
     $("#SelectionTime").text(regiontext);
-    console.log(now);
+    //console.log(now);
 });
 
 
@@ -349,6 +302,91 @@ $('body').on('click', '.DeleteMarkMP', function () {
     wavesurfer.clearRegions();
     //document.getElementById('SelectionTime').text = now;
     $("#SelectionTime").text(" ");
+
+});
+
+
+wavesurfer.on('region-update-end', function (region, event) {
+    console.log("entered method: region-update-end");
+
+    if (!region.hasDeleteButton) {
+        var regionEl = region.element;
+
+        var deleteButton = regionEl.appendChild(document.createElement('deleteButton'));
+        deleteButton.className = 'fa fa-trash';
+
+        deleteButton.addEventListener('click', function (e) {
+            var Xstarttime = region.start;
+            removeArrayElement(Xstarttime);
+            region.remove();
+        });
+
+        deleteButton.title = "Delete Mark";
+
+        var css = {
+            display: 'block',
+            float: 'right',
+            padding: '3px',
+            position: 'relative',
+            zIndex: 10,
+            cursor: 'pointer',
+            cursor: 'hand',
+            color: '#FFFFFF'
+        };
+
+        region.style(deleteButton, css);
+        region.hasDeleteButton = true;
+    }
+});
+
+function removeArrayElement(RStartTime) {
+    var i = regionArr.indexOf(RStartTime);
+    if (i != -1) {
+        regionArr.splice(i, 1);
+    }
+
+    var regiontext = "";
+    for (var i = 0; i < regionArr.length; i++) {
+        regiontext = regiontext + regionArr[i] + " ";
+    }
+
+    $("#SelectionTime").text(regiontext);
+
+}
+
+
+wavesurfer.on('region-mouseenter', function (region, event) {
+    var start_time = region.start;
+    var RegID = region.id;
+    // $("#SelectionTime").text(start_time);
+
+    var indexR = regionIDArr.indexOf(RegID);
+    var start_time = region.start;
+
+    regionArr[indexR] = start_time;
+
+    var regiontext = "";
+    for (var i = 0; i < regionArr.length; i++) {
+        regiontext = regiontext + regionArr[i] + " ";
+    }
+
+    $("#SelectionTime").text(regiontext);
+});
+
+
+wavesurfer.on('region-mouseleave', function (region, event) {
+   
+    //var RegID = region.id;
+    //var RIndex = regionIDArr.indexOf[RegID];
+
+    //regionArr[RIndex] = region.start;
+
+    //var regiontext = "";
+    //for (var i = 0; i < regionArr.length; i++) {
+    //    regiontext = regiontext + regionArr[i] + " ";
+    //}
+
+    //$("#SelectionTime").text(regiontext);
 
 });
 
